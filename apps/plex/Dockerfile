@@ -1,4 +1,4 @@
-FROM ghcr.io/onedr0p/ubuntu:jammy-20231004@sha256:6e060e90482632408063d0fbb4b616c77914ef10eaa6b089a00de5815471006c
+FROM ghcr.io/dstewen/ubuntu:jammy-20231004
 
 ARG TARGETPLATFORM
 ARG VERSION
@@ -11,7 +11,7 @@ ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility" \
     PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6" \
     PLEX_MEDIA_SERVER_USER="kah" \
     PLEX_MEDIA_SERVER_INFO_VENDOR="Docker" \
-    PLEX_MEDIA_SERVER_INFO_DEVICE="Docker Container (onedr0p)"
+    PLEX_MEDIA_SERVER_INFO_DEVICE="Docker Container (dstewen)"
 
 # hadolint ignore=DL3008,DL3015,SC2039,SC2086
 RUN \
