@@ -1,4 +1,4 @@
-FROM ghcr.io/dstewen/alpine:rolling@sha256:51632d23e56ae28a34f8e90df6fe8d02730b5462697ae52e8b01ad6484497819
+FROM ghcr.io/dstewen/alpine:rolling@sha256:56217da843181c6a29012c9fe33bdbba13edded95b3eff06a7766f023f1d0b02
 
 ARG TARGETPLATFORM
 ARG VERSION
