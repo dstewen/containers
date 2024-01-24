@@ -1,5 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "username": "self-hosted-test[bot]",
+  "gitAuthor": "self-hosted-test <351645+self-hosted-test[bot]@users.noreply.github.com>",
   "extends": [
     "config:recommended",
     "docker:enableMajor",
