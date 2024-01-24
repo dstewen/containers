@@ -1,4 +1,4 @@
-FROM ghcr.io/dstewen/alpine:rolling@sha256:56217da843181c6a29012c9fe33bdbba13edded95b3eff06a7766f023f1d0b02
+FROM ghcr.io/dstewen/alpine:3.19.0@sha256:56217da843181c6a29012c9fe33bdbba13edded95b3eff06a7766f023f1d0b02
 
 ARG TARGETPLATFORM
 ARG VERSION
