@@ -17,7 +17,7 @@ RUN \
   fi \
   && gcc -g main.c -o udp-broadcast-relay-redux
 
-FROM ghcr.io/dstewen/alpine:3.19.1
+FROM docker.io/library/alpine:3.19.1
 WORKDIR /app
 RUN \
   apk add --no-cache \
