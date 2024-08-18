@@ -1,4 +1,4 @@
-FROM ghcr.io/dstewen/ubuntu:jammy-20240530@sha256:4ee6f89d5a6ea26b6fd6b25c109ab8babd22df36d2368e687704c7f9789e7c65
+FROM ghcr.io/dstewen/ubuntu:jammy-20240808@sha256:f0a2c4e15c601b567f5df103f95fb2938a8520921951a30207fb78def4ee0f87
 
 ARG TARGETPLATFORM
 ARG VERSION
