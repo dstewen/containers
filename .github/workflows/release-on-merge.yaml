@@ -15,6 +15,9 @@ on:
       - "!apps/**/metadata.yaml"
       - "!apps/**/README.md"
 
+permissions:
+  packages: write 
+
 jobs:
   simple-checks:
     uses: dstewen/containers/.github/workflows/simple-checks.yaml@main
