@@ -1,6 +1,6 @@
 FROM ghcr.io/dstewen/par2cmdline-turbo:1.4.0 as par2cmdline-turbo
 
-FROM docker.io/library/alpine:3.23.3
+FROM docker.io/library/alpine:3.23.4
 ARG TARGETPLATFORM
 ARG VERSION
 ARG CHANNEL
