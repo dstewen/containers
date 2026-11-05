@@ -165,7 +165,7 @@
           if: ${{ matrix.image.tests_enabled }}
           uses: e1himself/goss-installation-action@v1.3.0
           with:
-            version: latest
+            version: v1.3.0
 
         - name: Prepare Build Outputs
           id: prepare-build-outputs
