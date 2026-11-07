@@ -1,0 +1,875 @@
+@import "tailwindcss";
+
+/* ─── Design tokens ─────────────────────────────────────── */
+/* Four themes share one token set. Dark is the default (set on <html>).
+   Amber stays the brand accent. Semantic colors (success / warning / danger)
+   are distinct hues from the accent so state never reads as "brand". */
+:root,
+[data-theme="light"] {
+  --color-base: #dce0e7;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #eceff4;
+  --color-surface-hover: #dde1e8;
+  --color-border: #cfd5de;
+  --color-border-strong: #b9c1ce;
+  --color-text: #12161c;
+  --color-text-strong: #000000;
+  --color-muted: #5a6370;
+  --color-muted-strong: #3b424d;
+  --color-faint: #8b93a0;
+  --color-accent: #e8a21c;
+  --color-accent-hover: #d4920e;
+  --color-accent-soft: rgba(232, 162, 28, 0.16);
+  --color-accent-text: #8c5a00;
+  --color-on-accent: #1c1404; /* text on accent/warning fills: amber needs dark text */
+  --color-danger: #cf3038;
+  --color-warning: #c85a10;
+  --color-success: #12915f;
+  --color-info: #2a6fdb;
+  --color-violet: #7a4fd8;
+  --color-grid: rgba(15, 23, 42, 0.07);
+  /* Memory categories on the VRAM breakdown bar. Hues, not severity: they
+     stay clear of the amber accent/warning, the red danger and the green
+     success, and each holds >= 3.4:1 against the card in every theme. */
+  --color-mem-engine: #0891b2;
+  --color-mem-system: #6d28d9;
+  --color-mem-other: #8a8478;
+
+  --toggle-track-off: #aab2bf;
+  --toggle-track-on: var(--color-accent);
+  --toggle-dot: #ffffff;
+
+  --shadow-card: 0 1px 2px rgba(20, 30, 50, 0.05), 0 0 0 1px var(--color-border);
+  --shadow-card-hover: 0 6px 20px rgba(20, 30, 50, 0.1), 0 0 0 1px var(--color-border-strong);
+  --shadow-shell: 0 24px 60px rgba(20, 30, 50, 0.18);
+
+  --color-surface-glass: var(--color-surface);
+  --color-card-glass: var(--color-surface);
+  --color-overlay: rgba(20, 26, 36, 0.45);
+  --color-term: #f5f7fa;
+  --term-text: #1f2630;
+  --term-mid: #3c424c;
+  --term-dim: #5c6470;
+  --term-strong: #0b0f14;
+  --term-line: rgba(15, 23, 42, 0.09);
+  --term-ctl: rgba(15, 23, 42, 0.18);
+  --term-ctl-hover: rgba(15, 23, 42, 0.4);
+  --term-track: rgba(15, 23, 42, 0.08);
+  --term-info: #2a6fdb;
+  --term-accent: #8c5a00;
+  --term-danger: #cf3038;
+
+  --body-gradient: var(--color-base);
+  --shell-gradient: none;
+}
+
+[data-theme="dark"] {
+  --color-base: #0a0c0f;
+  --color-surface: #12151a;
+  --color-surface-elevated: #181c22;
+  --color-surface-hover: #1f242b;
+  --color-border: #232830;
+  --color-border-strong: #343b46;
+  --color-text: #e9ecf0;
+  --color-text-strong: #ffffff;
+  --color-muted: #8a919c;
+  --color-muted-strong: #b3b9c2;
+  --color-faint: #5b626d;
+  --color-accent: #f0b03a;
+  --color-accent-hover: #f6c05a;
+  --color-accent-soft: rgba(240, 176, 58, 0.14);
+  --color-accent-text: #f4b942;
+  --color-on-accent: #1c1404;
+  --color-danger: #ff5d62;
+  --color-warning: #ff914d;
+  --color-success: #3fd08f;
+  --color-info: #6ea8ff;
+  --color-violet: #b690ff;
+  --color-grid: rgba(255, 255, 255, 0.045);
+  --color-mem-engine: #3fd0e4;
+  --color-mem-system: #8f6ff0;
+  --color-mem-other: #9aa3af;
+
+  --toggle-track-off: #2d333c;
+  --toggle-track-on: var(--color-accent);
+  --toggle-dot: #e9ecf0;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--color-border);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--color-border-strong);
+  --shadow-shell: 0 30px 80px rgba(0, 0, 0, 0.6);
+
+  --color-surface-glass: var(--color-surface);
+  --color-card-glass: var(--color-surface);
+  --color-overlay: rgba(4, 6, 8, 0.62);
+  --color-term: #07090b;
+  --term-text: #c9d1da;
+  --term-mid: #aab1bb;
+  --term-dim: #8892a0;
+  --term-strong: #eef1f4;
+  --term-line: rgba(255, 255, 255, 0.07);
+  --term-ctl: rgba(255, 255, 255, 0.14);
+  --term-ctl-hover: rgba(255, 255, 255, 0.3);
+  --term-track: rgba(255, 255, 255, 0.08);
+  --term-info: #7fb4ff;
+  --term-accent: #f4b942;
+  --term-danger: #ff7a7e;
+
+  --body-gradient: var(--color-base);
+  --shell-gradient: none;
+}
+
+/* White: cool neutral, brightest surfaces */
+[data-theme="white"] {
+  --color-base: #f3f4f6;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #f7f8fa;
+  --color-surface-hover: #eceef2;
+  --color-border: #e1e4e9;
+  --color-border-strong: #ccd1d9;
+  --color-text: #14181e;
+  --color-text-strong: #000000;
+  --color-muted: #5c6470;
+  --color-muted-strong: #3c424c;
+  --color-faint: #8e95a1;
+  --color-accent: #e8a21c;
+  --color-accent-hover: #d4920e;
+  --color-accent-soft: rgba(232, 162, 28, 0.15);
+  --color-accent-text: #8c5a00;
+  --color-on-accent: #1c1404;
+  --color-danger: #cf3038;
+  --color-warning: #c85a10;
+  --color-success: #12915f;
+  --color-info: #2a6fdb;
+  --color-violet: #7a4fd8;
+  --color-grid: rgba(15, 23, 42, 0.05);
+  --color-mem-engine: #0891b2;
+  --color-mem-system: #6d28d9;
+  --color-mem-other: #8a8a8a;
+
+  --toggle-track-off: #aeb5c0;
+  --toggle-track-on: var(--color-accent);
+  --toggle-dot: #ffffff;
+
+  --shadow-card: 0 1px 2px rgba(20, 30, 50, 0.05), 0 0 0 1px var(--color-border);
+  --shadow-card-hover: 0 6px 20px rgba(20, 30, 50, 0.1), 0 0 0 1px var(--color-border-strong);
+  --shadow-shell: 0 24px 60px rgba(20, 30, 50, 0.18);
+
+  --color-surface-glass: var(--color-surface);
+  --color-card-glass: var(--color-surface);
+  --color-overlay: rgba(20, 26, 36, 0.45);
+  --color-term: #ffffff;
+  --term-text: #1f2630;
+  --term-mid: #3c424c;
+  --term-dim: #5c6470;
+  --term-strong: #0b0f14;
+  --term-line: rgba(15, 23, 42, 0.09);
+  --term-ctl: rgba(15, 23, 42, 0.18);
+  --term-ctl-hover: rgba(15, 23, 42, 0.4);
+  --term-track: rgba(15, 23, 42, 0.08);
+  --term-info: #2a6fdb;
+  --term-accent: #8c5a00;
+  --term-danger: #cf3038;
+
+  --body-gradient: var(--color-base);
+  --shell-gradient: none;
+}
+
+/* OLED: pure black base, max contrast */
+[data-theme="oled"] {
+  --color-base: #000000;
+  --color-surface: #0b0c0e;
+  --color-surface-elevated: #121417;
+  --color-surface-hover: #1a1d21;
+  --color-border: #1f2328;
+  --color-border-strong: #30363d;
+  --color-text: #e9ecf0;
+  --color-text-strong: #ffffff;
+  --color-muted: #858c97;
+  --color-muted-strong: #b3b9c2;
+  --color-faint: #555b65;
+  --color-accent: #f0b03a;
+  --color-accent-hover: #f6c05a;
+  --color-accent-soft: rgba(240, 176, 58, 0.14);
+  --color-accent-text: #f4b942;
+  --color-on-accent: #1c1404;
+  --color-danger: #ff5d62;
+  --color-warning: #ff914d;
+  --color-success: #3fd08f;
+  --color-info: #6ea8ff;
+  --color-violet: #b690ff;
+  --color-grid: rgba(255, 255, 255, 0.045);
+  --color-mem-engine: #3fd0e4;
+  --color-mem-system: #8f6ff0;
+  --color-mem-other: #9aa3af;
+
+  --toggle-track-off: #272c33;
+  --toggle-track-on: var(--color-accent);
+  --toggle-dot: #e9ecf0;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--color-border);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--color-border-strong);
+  --shadow-shell: 0 30px 80px rgba(0, 0, 0, 0.8);
+
+  --color-surface-glass: var(--color-surface);
+  --color-card-glass: var(--color-surface);
+  --color-overlay: rgba(0, 0, 0, 0.7);
+  --color-term: #000000;
+  --term-text: #c9d1da;
+  --term-mid: #aab1bb;
+  --term-dim: #8892a0;
+  --term-strong: #eef1f4;
+  --term-line: rgba(255, 255, 255, 0.07);
+  --term-ctl: rgba(255, 255, 255, 0.14);
+  --term-ctl-hover: rgba(255, 255, 255, 0.3);
+  --term-track: rgba(255, 255, 255, 0.08);
+  --term-info: #7fb4ff;
+  --term-accent: #f4b942;
+  --term-danger: #ff7a7e;
+
+  --body-gradient: var(--color-base);
+  --shell-gradient: none;
+}
+
+/* ─── Density tokens (layout spacing) ───────────────────── */
+/* Compact is the default (matches server settings DEFAULTS.density).
+   Comfortable is the roomier override. Both density attribute blocks sit
+   AFTER theme blocks so --radius-* wins on source order (equal specificity). */
+:root,
+[data-density="compact"] {
+  --density-root-font: 112%;
+  --density-shell-pad: 20px;
+  --density-header-gap: 16px;
+  --density-page-gap: 10px;
+  --density-panel-pad: 13px;
+  --density-panel-title-mb: 9px;
+  --density-card-pad: 14px;
+  --density-card-gap: 8px;
+  --density-overview-rhythm: 16px;
+  --density-overview-title: 24px;
+  --radius-panel: 16px;
+  --radius-sm: 8px;
+}
+
+[data-density="comfortable"] {
+  --density-root-font: 121%;
+  --density-shell-pad: 32px;
+  --density-header-gap: 28px;
+  --density-page-gap: 18px;
+  --density-panel-pad: 20px;
+  --density-panel-title-mb: 16px;
+  --density-card-pad: 22px;
+  --density-card-gap: 12px;
+  --density-overview-rhythm: 24px;
+  --density-overview-title: 32px;
+  --radius-panel: 20px;
+  --radius-sm: 12px;
+}
+
+/* Compact: pin metric label/value text (Usage, GPU Power, VRAM caption, etc.)
+   to 14px. Tailwind's `.text-sm` (0,1,0) loses on specificity here. Only
+   `text-sm` inside surfaces is affected — buttons use text-xs/[10px]/[11px].
+   :root is compact by default, so bare .panel/.overview-card also pin. */
+:root:not([data-density="comfortable"]) .panel .text-sm,
+:root:not([data-density="comfortable"]) .overview-card .text-sm,
+[data-density="compact"] .panel .text-sm,
+[data-density="compact"] .overview-card .text-sm {
+  font-size: 14px;
+}
+
+/* ─── Ensure extension classes ────────────────────────── */
+@theme {
+  --color-base: var(--color-base);
+  --color-surface: var(--color-surface);
+  --color-surface-elevated: var(--color-surface-elevated);
+  --color-surface-hover: var(--color-surface-hover);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+  --color-text: var(--color-text);
+  --color-text-strong: var(--color-text-strong);
+  --color-muted: var(--color-muted);
+  --color-muted-strong: var(--color-muted-strong);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-on-accent: var(--color-on-accent);
+  --color-danger: var(--color-danger);
+  --color-warning: var(--color-warning);
+  --color-success: var(--color-success);
+  --color-info: var(--color-info);
+  --color-violet: var(--color-violet);
+  --color-accent-text: var(--color-accent-text);
+}
+
+/* ─── Base styles ─────────────────────────────────────── */
+html {
+  color-scheme: light;
+  font-size: var(--density-root-font, 121%);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+[data-theme="white"] {
+  color-scheme: light;
+}
+
+[data-theme="oled"] {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: "Geist Variable", "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--body-gradient);
+  background-attachment: fixed;
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-text-strong);
+}
+
+/* Hand cursor on all clickable controls */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+a[href],
+summary,
+label[for],
+select:not(:disabled),
+input[type="checkbox"]:not(:disabled),
+input[type="radio"]:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="button"]:not(:disabled),
+input[type="reset"]:not(:disabled) {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"][aria-disabled="true"],
+select:disabled,
+input:disabled {
+  cursor: not-allowed;
+}
+
+/* ─── Mono-spaced tabular numbers for metrics ──────────── */
+.font-tabular {
+  font-variant-numeric: tabular-nums;
+  font-family: "Geist Mono Variable", "Geist Mono", "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Dynamic metric bars — width via --bar-pct only */
+.metric-bar-fill {
+  width: var(--bar-pct, 0%);
+}
+
+/* VRAM breakdown bar segments (see src/shared/vramBreakdown.ts) */
+.mem-seg-engine {
+  background-color: var(--color-mem-engine);
+}
+.mem-seg-system {
+  background-color: var(--color-mem-system);
+}
+.mem-seg-other,
+.mem-seg-gpu {
+  background-color: var(--color-mem-other);
+}
+
+.sparkline-box {
+  width: var(--spark-w, 60px);
+  height: var(--spark-h, 16px);
+}
+
+/* sm:p-8 is too much outer page padding; keep the class, use p-4 scale. */
+@media (width >= 40rem) {
+  .sm\:p-8 {
+    padding: calc(var(--spacing) * 4);
+  }
+}
+
+
+
+.connection-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--color-warning) 45%, var(--color-border));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--color-warning) 10%, var(--color-surface-elevated));
+  color: var(--color-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.connection-banner-dot {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--color-warning);
+}
+
+.telemetry-stale {
+  opacity: 0.72;
+  filter: saturate(0.65);
+  transition: opacity 160ms ease, filter 160ms ease;
+}
+
+.icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--color-surface-elevated);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted-strong);
+  box-shadow: var(--shadow-card);
+  transition: background 0.15s, color 0.15s;
+}
+.icon-circle:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+/* ─── Open-access note (sidebar foot) ─────────────────── */
+.open-access {
+  position: relative;
+  padding: 0 2px;
+}
+.open-access-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 11.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+}
+.open-access-chip:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+.open-access-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-warning);
+  opacity: 0.8;
+}
+.open-access-popover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  width: 224px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-elevated);
+  box-shadow: var(--shadow-shell);
+  color: var(--color-text);
+  font-size: 12px;
+  line-height: 1.45;
+  animation: menu-fade-in 0.12s ease-out;
+}
+.open-access-dismiss {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--color-muted-strong);
+  text-decoration: underline;
+}
+
+/* ─── Form inputs & selects ─────────────────────────── */
+input[type="text"],
+input[type="number"],
+input[type="password"],
+select {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-elevated);
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--color-text);
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+select:focus {
+  border-color: var(--color-accent);
+}
+/* Native checkbox — tint to match theme */
+input[type="checkbox"] {
+  accent-color: var(--color-accent);
+}
+
+/*
+ * iOS Safari zooms the page when a focused text field is under 16px.
+ * Keep desktop/compact sizes elsewhere; only bump editable fields on iOS.
+ */
+@supports (-webkit-touch-callout: none) {
+  input[type="text"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="email"],
+  input[type="url"],
+  input[type="tel"],
+  select,
+  textarea,
+  .bench-input {
+    font-size: 16px !important;
+  }
+}
+
+/* ─── Toggle switch ────────────────────────────────────── */
+.toggle-track {
+  background: var(--toggle-track-off);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+.toggle-track.is-on {
+  background: var(--toggle-track-on);
+  box-shadow: none;
+}
+.toggle-dot {
+  background: var(--toggle-dot);
+}
+
+/* ─── Panel primitive ─────────────────────────────────── */
+.panel {
+  position: relative;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-glass);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+@supports not ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) {
+  .panel {
+    background-color: var(--color-surface);
+  }
+}
+.panel:hover {
+  border-color: var(--color-border-strong);
+}
+.panel-accent::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 24px;
+  bottom: 24px;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--color-accent) 20%,
+    var(--color-accent) 80%,
+    transparent 100%
+  );
+  opacity: 0.55;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted-strong);
+}
+.panel-title svg {
+  color: var(--color-accent);
+}
+
+/* ─── Overview card (frosted, clickable) ─────────────── */
+.overview-card {
+  position: relative;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-card-glass);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  text-align: left;
+  width: 100%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+@supports not ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) {
+  .overview-card {
+    background-color: var(--color-surface-elevated);
+  }
+}
+.overview-card:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--color-border-strong);
+  transform: translateY(-1px);
+}
+
+/* ─── Pulse / glow accents ─────────────────────────────── */
+.dot-glow-success {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-success) 20%, transparent);
+}
+.dot-glow-accent {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+/* ─── Status pill / chip ───────────────────────────────── */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-elevated);
+}
+.status-pill .dot {
+  height: 6px;
+  width: 6px;
+  border-radius: 9999px;
+}
+.status-pill.is-online .dot {
+  background: var(--color-success);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-success) 30%, transparent);
+}
+.status-pill.is-offline .dot {
+  background: var(--color-danger);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  color: var(--color-muted-strong);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Online chip (overview welcome row) ──────────────── */
+.online-chip {
+  display: none; /* hidden on mobile; shown at sm via media query below */
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: var(--color-surface-elevated);
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-muted-strong);
+  box-shadow: var(--shadow-card);
+  white-space: nowrap;
+}
+@media (min-width: 640px) {
+  .online-chip {
+    display: inline-flex;
+  }
+}
+.online-chip .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-success);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-success) 20%, transparent);
+}
+
+/* ─── LLM badge ───────────────────────────────────────── */
+.llm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+/* Endpoint exposure / auth posture (#17) */
+.llm-posture {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: help;
+}
+.llm-posture__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.llm-posture--ok {
+  background: color-mix(in srgb, var(--color-success) 16%, transparent);
+  color: var(--color-success);
+}
+.llm-posture--warn {
+  background: color-mix(in srgb, var(--color-warning) 16%, transparent);
+  color: var(--color-warning);
+}
+.llm-posture--danger {
+  background: color-mix(in srgb, var(--color-danger) 16%, transparent);
+  color: var(--color-danger);
+}
+
+
+
+
+
+@keyframes menu-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Dialog, benchmark and settings styles live in src/styles/dialogs.css;
+   the Showcase page styles live in src/styles/showcase.css. */
+
+/* ─── Focus ring ───────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
+input:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+
+/* ─── Theme transition ─────────────────────────────────── */
+html {
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* ─── Scrollbar styling ────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}
+
+/* ─── Page transitions ─────────────────────────────────── */
+/* Only <main> animates (hooks/pageTransition.ts); the sidebar swaps its highlight with a short cross-fade. */
+.app-content > main {
+  view-transition-name: page;
+}
+::view-transition-group(root) {
+  animation-duration: 0.18s;
+}
+::view-transition-old(page) {
+  animation: page-out 0.16s cubic-bezier(0.4, 0, 1, 1) both;
+}
+::view-transition-new(page) {
+  animation: page-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) 0.04s both;
+}
+@keyframes page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.997);
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.994);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ─── Press + hover feel ───────────────────────────────── */
+.btn,
+.icon-circle,
+.seg button {
+  transition-property: background-color, border-color, color, box-shadow, transform, opacity;
+  transition-duration: 0.16s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn:active:not(:disabled),
+.icon-circle:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.overview-card.is-link {
+  transition: border-color 0.2s ease, box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.overview-card.is-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px -14px rgb(0 0 0 / 0.28);
+}
+.overview-card.is-link:active {
+  transform: translateY(0) scale(0.995);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn:active,
+  .icon-circle:active,
+  .overview-card.is-link:hover,
+  .overview-card.is-link:active {
+    transform: none;
+  }
+}
