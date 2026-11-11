@@ -29,6 +29,7 @@ ARG VITE_HISTORY_HOURS=8
 ENV VITE_HISTORY_HOURS=${VITE_HISTORY_HOURS}
 COPY . .
 RUN npm run build \
+  || (echo "npm build failed — retrying…" && npm run build) \
   || (echo "npm build failed — retrying…" && npm run build)
 
 # Drop devDependencies so the runtime image can copy node_modules
