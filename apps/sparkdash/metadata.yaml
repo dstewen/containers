@@ -1,0 +1,9 @@
+---
+app: sparkdash
+base: false
+channels:
+  - name: latest
+    platforms: ["linux/arm64", "linux/amd64"]
+    stable: true
+    tests:
+      enabled: false
