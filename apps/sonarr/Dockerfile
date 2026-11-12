@@ -1,3 +1,17 @@
+FROM docker.io/library/alpine:3.24 as envsubst
+ARG TARGETPLATFORM
+ARG VERSION
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT=""
+ARG TARGETPLATFORM
+ENV CGO_ENABLED=0 \
+    GOOS=${TARGETOS} \
+    GOARCH=${TARGETARCH} \
+    GOARM=${TARGETVARIANT}
+RUN apk add --no-cache go \
+    && go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
+
 FROM docker.io/library/alpine:3.24.3
 
 ARG TARGETPLATFORM
@@ -11,7 +25,15 @@ ENV \
     SONARR__ANALYTICS_ENABLED="False"
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache bash ca-certificates curl icu-libs libintl sqlite-libs xmlstarlet
+RUN apk add --no-cache \
+        bash \
+        ca-certificates \
+        catatonit \
+        curl \
+        icu-libs \
+        libintl \
+        sqlite-libs \
+        xmlstarlet
 #hadolint ignore=DL3059
 RUN \
     case "${TARGETPLATFORM}" in \
