@@ -10,7 +10,7 @@ ENV CGO_ENABLED=0 \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
 RUN apk add --no-cache go \
-    && go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest
+    && go build -ldflags="-s -w" -o /usr/local/bin/envsubst github.com/drone/envsubst/cmd/envsubst@latest
 
 FROM docker.io/library/alpine:3.24.3
 
