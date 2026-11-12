@@ -149,12 +149,12 @@ RUN \
     && rm -rf /tmp/*
 
 COPY --from=builder /go/bin/envsubst /usr/local/bin/envsubst
-COPY ./apps/home-assistant/scripts /scripts
+COPY ./scripts /scripts
 VOLUME ["/config"]
 
 WORKDIR /app
 USER kah
-COPY ./apps/home-assistant/entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
 
