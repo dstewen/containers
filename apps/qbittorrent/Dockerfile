@@ -9,7 +9,7 @@ ENV QBITTORRENT__PORT=8080 \
 
 #hadolint ignore=DL3018
 RUN \
-    apk add --no-cache ca-certificates curl geoip p7zip python3 \
+    apk add --no-cache ca-certificates curl geoip jq p7zip python3 \
     && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community qt6-qtbase-sqlite
 
 RUN \
