@@ -62,8 +62,8 @@ RUN \
     && chmod -R 755 /app \
     && rm -rf /tmp/*
 
-COPY ./apps/prowlarr/config.xml.tmpl /app/config.xml.tmpl
-COPY ./apps/prowlarr/entrypoint.sh /entrypoint.sh
+COPY ./config.xml.tmpl /app/config.xml.tmpl
+COPY ./entrypoint.sh /entrypoint.sh
 COPY --from=envsubst /go/bin/envsubst /usr/local/bin/envsubst
 
 ENTRYPOINT ["/usr/bin/catatonit", "--"]
