@@ -31,11 +31,13 @@ RUN apk add --no-cache \
         git \
     && \
     pip install --upgrade pip \
-    && git clone https://github.com/blacktwin/JBOPS.git . \
+    && git clone https://github.com/blacktwin/JBOPS.git /tmp/jbops \
     && if [ -n "${VERSION}" ]; then \
         NUMBER_COMMITS_TO_REVERT=$(( $(git rev-list --count --first-parent HEAD) - $(echo "${VERSION}" | cut -d "." -f3) )); \
         git checkout "master~${NUMBER_COMMITS_TO_REVERT}"; \
     fi \
+    && mv /tmp/jbops/* /tmp/jbops/.* . 2>/dev/null \
+    && rm -rf /tmp/jbops \
     && \
     pip install --upgrade --requirement /app/requirements.txt \
     && apk del --purge .build-deps \
