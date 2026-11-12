@@ -7,6 +7,8 @@ ARG CHANNEL
 #hadolint ignore=DL3018
 RUN apk add --no-cache ca-certificates postgresql16-client~"${VERSION}"
 
+RUN adduser -D kah
+
 USER kah
 
 COPY ./entrypoint.sh /entrypoint.sh

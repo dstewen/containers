@@ -33,6 +33,8 @@ RUN \
     && chmod -R 755 /app/qbittorrent-nox \
     && rm -rf /tmp/*
 
+RUN adduser -D kah
+
 USER kah
 
 COPY ./config.py /scripts/config.py

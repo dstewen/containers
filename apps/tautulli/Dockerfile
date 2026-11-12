@@ -42,6 +42,8 @@ RUN \
         /root/.cargo \
         /tmp/*
 
+RUN adduser -D kah
+
 USER kah
 COPY ./entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]

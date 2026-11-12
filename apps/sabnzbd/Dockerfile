@@ -58,6 +58,8 @@ RUN ln -s /usr/local/bin/par2 /usr/local/bin/par2create \
     && ln -s /usr/local/bin/par2 /usr/local/bin/par2repair \
     && ln -s /usr/local/bin/par2 /usr/local/bin/par2verify
 
+RUN adduser -D kah
+
 USER kah
 COPY ./sabnzbd.ini /app/sabnzbd.ini
 COPY ./entrypoint.sh /entrypoint.sh

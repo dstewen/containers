@@ -32,6 +32,8 @@ RUN \
     && chmod -R 755 /app \
     && rm -rf /tmp/*
 
+RUN adduser -D kah
+
 USER kah
 
 COPY ./config.xml.tmpl /app/config.xml.tmpl

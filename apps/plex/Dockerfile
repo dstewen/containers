@@ -50,6 +50,8 @@ RUN \
     && printf "umask %d\n" "${UMASK}" >> /etc/bash.bashrc
 
 WORKDIR "${PLEX_MEDIA_SERVER_HOME}"
+RUN adduser --disabled-password --gecos '' kah
+
 USER kah
 COPY ./plex-preferences.sh /scripts/plex-preferences.sh
 COPY ./entrypoint.sh /entrypoint.sh

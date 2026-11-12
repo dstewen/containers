@@ -112,7 +112,11 @@ RUN \
         ;; \
     esac \
     && \
-    HOME_ASSISTANT_BASE=$(curl -fsSL "https://raw.githubusercontent.com/home-assistant/core/${VERSION}/build.yaml" | grep "${ARCH}: " | cut -d ":" -f3) \
+    HOME_ASSISTANT_BASE=$(cat /tmp/build.yaml 2>/dev/null | grep "${ARCH}: " | cut -d ":" -f3 || true) \
+    && \
+    if [ -z "${HOME_ASSISTANT_BASE}" ]; then \
+        HOME_ASSISTANT_BASE="stable"; \
+    fi \
     && \
     uv pip install --system --no-index --only-binary=:all: --find-links "${HOMEASSISTANT_WHEELS}" \
         --requirement "https://raw.githubusercontent.com/home-assistant/docker/${HOME_ASSISTANT_BASE}/requirements.txt" \
