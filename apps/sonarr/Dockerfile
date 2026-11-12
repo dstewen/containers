@@ -34,8 +34,8 @@ RUN \
 
 USER kah
 
-COPY ./apps/sonarr/config.xml.tmpl /app/config.xml.tmpl
-COPY ./apps/sonarr/entrypoint.sh /entrypoint.sh
+COPY ./config.xml.tmpl /app/config.xml.tmpl
+COPY ./entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.title="${SONARR__INSTANCE_NAME} (${SONARR__BRANCH})"

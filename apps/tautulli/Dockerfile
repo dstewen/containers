@@ -43,7 +43,7 @@ RUN \
         /tmp/*
 
 USER kah
-COPY ./apps/tautulli/entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/Tautulli/Tautulli"

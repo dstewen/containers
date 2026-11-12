@@ -34,8 +34,8 @@ RUN \
 
 USER kah
 
-COPY ./apps/readarr/config.xml.tmpl /app/config.xml.tmpl
-COPY ./apps/readarr/entrypoint.sh /entrypoint.sh
+COPY ./config.xml.tmpl /app/config.xml.tmpl
+COPY ./entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/Readarr/Readarr"

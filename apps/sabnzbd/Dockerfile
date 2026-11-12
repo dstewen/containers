@@ -59,8 +59,8 @@ RUN ln -s /usr/local/bin/par2 /usr/local/bin/par2create \
     && ln -s /usr/local/bin/par2 /usr/local/bin/par2verify
 
 USER kah
-COPY ./apps/sabnzbd/sabnzbd.ini /app/sabnzbd.ini
-COPY ./apps/sabnzbd/entrypoint.sh /entrypoint.sh
+COPY ./sabnzbd.ini /app/sabnzbd.ini
+COPY ./entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/sabnzbd/sabnzbd"

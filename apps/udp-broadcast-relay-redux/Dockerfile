@@ -23,5 +23,5 @@ RUN \
   apk add --no-cache \
     bash
 COPY --from=builder /build/udp-broadcast-relay-redux .
-COPY ./apps/udp-broadcast-relay-redux/entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
