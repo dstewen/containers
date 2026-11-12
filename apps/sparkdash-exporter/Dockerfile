@@ -16,8 +16,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 COPY package.json ./
-RUN npm ci --no-audit --no-fund \
-  || (echo "npm ci failed once — retrying…" && npm cache clean --force && npm ci --no-audit --no-fund)
+RUN npm install --no-audit --no-fund \
+  || (echo "npm install failed once — retrying…" && npm cache clean --force && npm install --no-audit --no-fund)
 
 COPY server/ ./server/
 
