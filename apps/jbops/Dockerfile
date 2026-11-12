@@ -47,7 +47,7 @@ RUN apk add --no-cache \
         /tmp/*
 
 USER kah
-COPY ./apps/jbops/entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 CMD ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.source="https://github.com/blacktwin/JBOPS"
