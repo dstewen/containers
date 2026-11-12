@@ -1,16 +1,13 @@
-FROM docker.io/library/alpine:3.24 as envsubst
-ARG TARGETPLATFORM
-ARG VERSION
+FROM docker.io/library/golang:1.24-alpine as envsubst
 ARG TARGETOS
 ARG TARGETARCH
 ARG TARGETVARIANT=""
-ARG TARGETPLATFORM
 ENV CGO_ENABLED=0 \
     GOOS=${TARGETOS} \
     GOARCH=${TARGETARCH} \
     GOARM=${TARGETVARIANT}
-RUN apk add --no-cache go \
-    && go build -ldflags="-s -w" -o /usr/local/bin/envsubst github.com/drone/envsubst/cmd/envsubst@latest
+RUN go install -ldflags="-s -w" github.com/drone/envsubst/cmd/envsubst@latest && \
+    cp /go/bin/envsubst /usr/local/bin/envsubst
 
 FROM docker.io/library/alpine:3.24.3
 
