@@ -15,9 +15,6 @@ on:
       - "!apps/**/metadata.yaml"
       - "!apps/**/README.md"
 
-permissions:
-  packages: write 
-
 secrets:
   BOT_CLIENT_ID:
     required: true

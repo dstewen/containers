@@ -1,39 +1,39 @@
 ---
-  name: "Image Build"
+name: "Image Build"
 
-  on:
-    workflow_call:
-      inputs:
-        appsToBuild:
-          required: false
-          type: string
-          default: ""
-        channelsToBuild:
-          required: false
-          type: string
-          default: ""
-        pushImages:
-          required: false
-          default: false
-          type: boolean
-        sendNotifications:
-          required: false
-          default: false
-          type: boolean
-        force:
-          required: false
-          default: true
-          type: boolean
-          description: Force rebuild
-      secrets:
-        BOT_CLIENT_ID:
-          description: The GitHub App Client ID
-          required: true
-        BOT_APP_PRIVATE_KEY:
-          description: The private key of the GitHub App
-          required: true
+on:
+  workflow_call:
+    inputs:
+      appsToBuild:
+        required: false
+        type: string
+        default: ""
+      channelsToBuild:
+        required: false
+        type: string
+        default: ""
+      pushImages:
+        required: false
+        default: false
+        type: boolean
+      sendNotifications:
+        required: false
+        default: false
+        type: boolean
+      force:
+        required: false
+        default: true
+        type: boolean
+        description: Force rebuild
+    secrets:
+      BOT_CLIENT_ID:
+        description: The GitHub App Client ID
+        required: true
+      BOT_APP_PRIVATE_KEY:
+        description: The private key of the GitHub App
+        required: true
 
-  jobs:
+jobs:
     prepare:
       name: Prepare to Build
       runs-on: ubuntu-latest
