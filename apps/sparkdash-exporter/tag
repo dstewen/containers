@@ -1,3 +1,6 @@
-FROM ghcr.io/dstewen/containers/sparkdash-exporter:latest
+FROM ghcr.io/dstewen/containers/sparkdash-exporter:v1.0.0
 
-# Placeholder for Renovate to update. The actual image is built by build.sh.
+# This file exists only so Renovate can track sparkDash updates.
+# The actual sparkDash image is built from the Dockerfile in this
+# same directory by build.sh.  Renovate updates the tag here,
+# the HelmRelease in talos-mixed picks it up via Flux.
