@@ -35,8 +35,8 @@ RUN \
 
 USER kah
 
-COPY ./apps/qbittorrent/config.py /scripts/config.py
-COPY ./apps/qbittorrent/entrypoint.sh /entrypoint.sh
+COPY ./config.py /scripts/config.py
+COPY ./entrypoint.sh /entrypoint.sh
 
 CMD ["/entrypoint.sh"]
 
