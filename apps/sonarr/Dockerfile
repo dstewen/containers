@@ -63,6 +63,9 @@ RUN adduser -D kah \
 
 COPY ./config.xml.tmpl /app/config.xml.tmpl
 COPY ./entrypoint.sh /entrypoint.sh
+COPY --from=envsubst /usr/local/bin/envsubst /usr/local/bin/envsubst
+
+ENTRYPOINT ["/usr/bin/catatonit", "--"]
 CMD ["/entrypoint.sh"]
 
 LABEL org.opencontainers.image.title="${SONARR__INSTANCE_NAME} (${SONARR__BRANCH})"
