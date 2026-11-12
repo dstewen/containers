@@ -1,4 +1,4 @@
-FROM ghcr.io/dstewen/containers/sparkdash-exporter:v1.0.0
+FROM ghcr.io/dstewen/containers/sparkdash-exporter:v1.0.1
 
 # This file exists only so Renovate can track sparkDash updates.
 # The actual sparkDash image is built from the Dockerfile in this
