@@ -1,0 +1,13 @@
+{
+  "name": "sparkdash-exporter",
+  "version": "1.0.0",
+  "description": "sparkDash SSH exporter — runs on DGX Spark nodes, allows sparkdash to collect metrics via SSH, exposes local /metrics for Prometheus",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "ssh2": "^1.16.0"
+  }
+}
