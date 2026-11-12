@@ -18,6 +18,12 @@ on:
 permissions:
   packages: write 
 
+secrets:
+  BOT_CLIENT_ID:
+    required: true
+  BOT_APP_PRIVATE_KEY:
+    required: true
+
 jobs:
   simple-checks:
     uses: dstewen/containers/.github/workflows/simple-checks.yaml@main
