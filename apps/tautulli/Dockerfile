@@ -27,7 +27,7 @@ RUN \
 
 #hadolint ignore=DL3018,DL3013
 RUN \
-    apk add --no-cache ca-certificates python3 py3-lxml py3-openssl py3-setuptools \
+    apk add --no-cache bash ca-certificates python3 py3-lxml py3-openssl py3-setuptools \
     && \
     apk add --no-cache --virtual .build-deps py3-pip make gcc g++ python3-dev \
     && \

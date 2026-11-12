@@ -30,6 +30,7 @@ RUN \
     # Keep py3-pip installed
     \
     apk add --no-cache \
+        bash \
         ca-certificates \
         python3 \
         py3-pip \

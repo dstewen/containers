@@ -5,7 +5,7 @@ ARG VERSION
 ARG CHANNEL
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates postgresql16-client~"${VERSION}"
+RUN apk add --no-cache bash ca-certificates postgresql16-client~"${VERSION}"
 
 RUN adduser -D kah
 

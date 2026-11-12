@@ -11,7 +11,7 @@ ENV \
     RADARR__ANALYTICS_ENABLED="False"
 
 #hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates curl icu-libs libintl sqlite-libs xmlstarlet
+RUN apk add --no-cache bash ca-certificates curl icu-libs libintl sqlite-libs xmlstarlet
 #hadolint ignore=DL3059
 RUN \
     case "${TARGETPLATFORM}" in \

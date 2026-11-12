@@ -18,6 +18,7 @@ ENV PLEXAPI_CONFIG_PATH="/config/config.ini" \
 
 #hadolint ignore=DL3018,DL3013
 RUN apk add --no-cache \
+        bash \
         ca-certificates \
         python3 \
     && \
