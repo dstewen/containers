@@ -3,6 +3,9 @@
 #shellcheck disable=SC1091
 test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 
+# Create config directory if it doesn't exist
+mkdir -p /config
+
 # Discover existing configuration settings for backwards compatibility
 if [[ -f /config/config.xml ]]; then
     current_analytics_enabled="$(xmlstarlet sel -t -v "//AnalyticsEnabled" -nl /config/config.xml)"
