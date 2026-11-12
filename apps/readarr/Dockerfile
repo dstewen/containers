@@ -54,9 +54,12 @@ RUN \
     && chmod -R 755 /app \
     && rm -rf /tmp/*
 
-RUN adduser -D kah
-
-USER kah
+RUN adduser -D kah \
+    && addgroup kah disk \
+    && addgroup kah video \
+    && addgroup kah audio \
+    && mkdir -p /config \
+    && chown -R kah:kah /config
 
 COPY ./config.xml.tmpl /app/config.xml.tmpl
 COPY ./entrypoint.sh /entrypoint.sh

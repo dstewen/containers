@@ -5,6 +5,7 @@ test -f "/scripts/umask.sh" && source "/scripts/umask.sh"
 
 # Create config directory if it doesn't exist
 mkdir -p /config
+chmod 777 /config
 
 # Discover existing configuration settings for backwards compatibility
 if [[ -f /config/config.xml ]]; then
