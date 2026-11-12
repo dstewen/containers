@@ -1,0 +1,21 @@
+# Sample power meter configuration for Home Assistant integration.
+# Copy to power-meters.json and set SPARKDASH_HA_TOKEN in the environment.
+# See README.md for full documentation.
+
+{
+  "meters": {
+    "ha": {
+      "type": "homeassistant",
+      "url": "https://homeassistant.local:8123"
+    }
+  },
+  "units": {
+    "spark-a": {
+      "meter": "ha",
+      "channel": "sensor.power_strip_outlet_3_power",
+      "since": "2026-08-13T00:00:00Z"
+    }
+  },
+  "pollIntervalMs": 10000,
+  "staleAfterMs": 30000
+}

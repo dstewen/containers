@@ -1,0 +1,3 @@
+FROM ghcr.io/dstewen/containers/sparkdash-exporter:latest
+
+# Placeholder for Renovate to update. The actual image is built by build.sh.

@@ -1,0 +1,14 @@
+# https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#file
+file:
+  /app/server/index.js:
+    exists: true
+  /app/server/collectors.js:
+    exists: true
+  /app/server/metrics.js:
+    exists: true
+  /app/server/powermeter.js:
+    exists: true
+  /app/package.json:
+    exists: true
+  /app/package.json:
+    contains: sparkdash-exporter
