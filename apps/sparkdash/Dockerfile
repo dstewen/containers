@@ -47,6 +47,9 @@ RUN npm prune --omit=dev --no-audit --no-fund \
 # ============================================================
 FROM ${NODE_IMAGE}
 
+ARG VERSION=dev
+ARG REVISION=none
+
 LABEL org.opencontainers.image.version="${VERSION}"
 LABEL org.opencontainers.image.revision="${REVISION}"
 
