@@ -68,6 +68,8 @@ Each Image will be built with a `rolling` tag, along with tags specific to it's 
 Container | Channel | Image | Latest Tags
 --- | --- | --- | ---
 [actions-runner]() | stable | ghcr.io/dstewen/actions-runner |
+[sparkdash]() | stable | ghcr.io/dstewen/sparkdash |
+[sparkdash-exporter]() | stable | ghcr.io/dstewen/sparkdash-exporter |
 
 
 ## Contributing
