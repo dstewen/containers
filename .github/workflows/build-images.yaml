@@ -33,6 +33,10 @@ on:
         description: The private key of the GitHub App
         required: true
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
     prepare:
       name: Prepare to Build
