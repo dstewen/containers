@@ -9,7 +9,7 @@
 ARG VERSION=dev
 ARG REVISION=none
 
-ARG NODE_IMAGE=public.ecr.aws/docker/library/node:22-bookworm-slim
+ARG NODE_IMAGE=node:22-bookworm-slim
 FROM ${NODE_IMAGE} AS builder
 
 WORKDIR /app

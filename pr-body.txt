@@ -1,0 +1,17 @@
+## Problem
+
+Docker builds complete successfully but fail at the push step:
+- sparkdash: `denied: permission_denied: installation not allowed to Create organization package`
+- sparkdash-exporter: `denied: installation not allowed to Read organization package`
+
+## Root cause
+
+The workflow uses the GitHub App token from `create-github-app-token@v3` for Docker login to GHCR. This token is a scoped PAT that does **not** include package permissions.
+
+The workflow has `permissions: packages: write` at the job level, but that grants the built-in `GITHUB_TOKEN` secret — not the separate app token.
+
+## Fix
+
+Use `secrets.GITHUB_TOKEN` for Docker login instead of the app token. This inherits the workflow-level `permissions: packages: write`, allowing successful image pushes.
+
+This matches the approach used by [joryirving/containers](https://github.com/joryirving/containers).
