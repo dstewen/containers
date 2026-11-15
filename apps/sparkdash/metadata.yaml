@@ -1,0 +1,11 @@
+# https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#file
+app: sparkdash
+base: false
+semantic_versioning: true
+channels:
+  - name: stable
+    platforms: ["linux/arm64"]
+    stable: true
+    tests:
+      enabled: false
+      type: cli

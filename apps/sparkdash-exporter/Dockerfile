@@ -6,6 +6,9 @@
 #   - SSH server (port 2222): allows sparkdash to run allowlisted metric commands
 #   - HTTP /metrics (port 9100): Prometheus text-format endpoint
 
+ARG VERSION=dev
+ARG REVISION=none
+
 ARG NODE_IMAGE=public.ecr.aws/docker/library/node:22-bookworm-slim
 FROM ${NODE_IMAGE} AS builder
 
@@ -55,5 +58,8 @@ ENV ES_POWER_METERS_CONFIG=/app/config/power-meters.json
 ENV ES_SSH_HOST_KEY=/etc/ssh/ssh_host_ed25519_key
 
 EXPOSE 2222 9100
+
+LABEL org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.revision="${REVISION}"
 
 CMD ["node", "server/index.js"]
