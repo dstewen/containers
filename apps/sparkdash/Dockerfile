@@ -3,11 +3,17 @@
 # Dockerfile for arm64 (DGX Spark GB10 platform)
 # ============================================================
 
+ARG VERSION=dev
+ARG REVISION=none
+
 # library/node via public.ecr.aws — Docker Hub (docker.io) often resolves
 # to IPv6; Sparks with no IPv6 route fail auth.docker.io with
 # "network is unreachable". ECR public is the same official image, IPv4-first.
 ARG NODE_IMAGE=public.ecr.aws/docker/library/node:22-bookworm-slim
 FROM ${NODE_IMAGE} AS builder
+
+ARG VERSION
+ARG REVISION
 
 WORKDIR /app
 
@@ -40,6 +46,9 @@ RUN npm prune --omit=dev --no-audit --no-fund \
 # Production image — lean runtime
 # ============================================================
 FROM ${NODE_IMAGE}
+
+LABEL org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.revision="${REVISION}"
 
 # SSH client + sshpass for remote Sparks; util-linux provides nsenter for host GPU/net
 RUN apt-get update && apt-get install -y --no-install-recommends \
