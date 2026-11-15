@@ -30,6 +30,9 @@ COPY server/ ./server/
 # ============================================================
 FROM ${NODE_IMAGE}
 
+ARG VERSION=dev
+ARG REVISION=none
+
 # SSH server, nvidia-smi path, and basic utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-server sshpass procps \
