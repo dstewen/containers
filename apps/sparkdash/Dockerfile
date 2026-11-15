@@ -6,10 +6,9 @@
 ARG VERSION=dev
 ARG REVISION=none
 
-# library/node via public.ecr.aws — Docker Hub (docker.io) often resolves
-# to IPv6; Sparks with no IPv6 route fail auth.docker.io with
-# "network is unreachable". ECR public is the same official image, IPv4-first.
-ARG NODE_IMAGE=public.ecr.aws/docker/library/node:22-bookworm-slim
+# node:22-bookworm-slim is fully multi-arch (amd64 + arm64).
+# Docker Hub is the canonical source — ECR mirror lacks arm64 manifests.
+ARG NODE_IMAGE=node:22-bookworm-slim
 FROM ${NODE_IMAGE} AS builder
 
 ARG VERSION

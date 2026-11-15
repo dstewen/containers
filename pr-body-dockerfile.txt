@@ -1,0 +1,25 @@
+## Problem
+
+Both Dockerfiles fail with `UndefinedVar: Usage of undefined variable '$VERSION'` and `'$REVISION'` during the build step because:
+
+In multi-stage Dockerfiles, each `FROM` creates a new build stage. ARGs declared before the first `FROM` are only visible in stages that don't have their own `FROM` command — they are **not** automatically available after subsequent `FROM` directives.
+
+Both Dockerfiles declare `VERSION` and `REVISION` as ARGs before the builder `FROM`, but then use them in `LABEL` directives **after** the second `FROM` (the production stage), where they are undefined.
+
+## Fix
+
+Re-declare the ARGs with defaults in the production stage of both Dockerfiles:
+
+```dockerfile
+ARG VERSION=dev
+ARG REVISION=none
+```
+
+This makes them visible to the `LABEL` directives in the production stage.
+
+## Impact
+
+- sparkdash: Fixes `UndefinedVar: Usage of undefined variable '$VERSION' (line 50)` and `'$REVISION' (line 51)`
+- sparkdash-exporter: Fixes the same issue at lines 65/66
+
+This is a required fix before any Docker images can be built successfully.

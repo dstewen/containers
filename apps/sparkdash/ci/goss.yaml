@@ -1,0 +1,22 @@
+# https://github.com/aelsabbahy/goss/blob/master/docs/manual.md#file
+file:
+  /app/server/index.js:
+    exists: true
+  /app/package.json:
+    exists: true
+  /app/package.json:
+    contains: sparkdash
+  /app/dist:
+    exists: true
+    is_dir: true
+  /app/config:
+    exists: true
+    is_dir: true
+
+# Check the server port is exposed (sparkdash runs on 5555)
+exec:
+  node_port:
+    command: node -e "require('./package.json').name"
+    exit-status: 0
+    stdout:
+    - match: sparkdash
