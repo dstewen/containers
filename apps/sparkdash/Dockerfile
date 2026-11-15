@@ -8,7 +8,7 @@ ARG REVISION=none
 
 # node:22-bookworm-slim is fully multi-arch (amd64 + arm64).
 # Docker Hub is the canonical source — ECR mirror lacks arm64 manifests.
-ARG NODE_IMAGE=node:22-bookworm-slim
+ARG NODE_IMAGE=node:26-bookworm-slim
 FROM ${NODE_IMAGE} AS builder
 
 ARG VERSION
