@@ -52,7 +52,7 @@ let hostKeys = undefined;
 if (process.env.ES_SSH_HOST_KEY) {
   try {
     const keyData = fs.readFileSync(process.env.ES_SSH_HOST_KEY);
-    hostKeys = { ed25519: keyData };
+    hostKeys = [keyData];
   } catch (err) {
     console.error("[exporter] Failed to load host key:", err.message);
   }
