@@ -1,19 +1,17 @@
 #!/usr/bin/env bash
-# Returns a dynamic version based on the current git commit hash
-# This ensures every code change triggers a new image build
+# Returns the latest upstream version for sparkdash-exporter.
+# The tag file is updated by Renovate to track the upstream version.
 set -euo pipefail
 VERSION="${1:-stable}"
 
 case "${VERSION}" in
   stable)
-    # Use short git commit hash so changes to the exporter source always produce a new version
-    # latest.sh lives at ci/latest.sh → repo root is 3 levels up: ../../..
-    REPO_ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
-    if [ -d "${REPO_ROOT}/.git" ]; then
-      (cd "${REPO_ROOT}" && git rev-parse --short=8 HEAD)
+    # Extract version from the tag file (e.g., v1.0.0)
+    TAG_FILE="$(dirname "$0")/tag"
+    if [ -f "${TAG_FILE}" ]; then
+      echo "$(grep -oP 'v\K[0-9.]+' "${TAG_FILE}" | head -n 1)"
     else
-      # Fallback: use date-time as version so builds still happen
-      echo "$(date -u +%Y%m%d%H%M%S)"
+      echo "1.0.0"
     fi
     ;;
   *)
