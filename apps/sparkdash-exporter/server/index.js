@@ -15,7 +15,8 @@
  * No SSH/GPU deps on the dashboard host — the exporter runs on the node itself.
  */
 
-import { Server } from "ssh2";
+import ssh2 from "ssh2";
+const { Server } = ssh2;
 import { createServer } from "http";
 import { renderMetrics } from "./metrics.js";
 import { collectGpu, collectCpu, collectMemory, collectNetwork, collectStorage, collectLlm, collectSystemInfo } from "./collectors.js";
