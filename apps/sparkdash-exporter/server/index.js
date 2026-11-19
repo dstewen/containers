@@ -18,6 +18,7 @@
 import ssh2 from "ssh2";
 const { Server } = ssh2;
 import { createServer } from "http";
+import fs from "fs";
 import { renderMetrics } from "./metrics.js";
 import { collectGpu, collectCpu, collectMemory, collectNetwork, collectStorage, collectLlm, collectSystemInfo } from "./collectors.js";
 import { PowerMeterTracker } from "./powermeter.js";
@@ -47,14 +48,18 @@ const ALLOWED_COMMANDS = new Set([
   "system-info", "probe",
 ]);
 
-let hostKeyPath = process.env.ES_SSH_HOST_KEY;
-if (!hostKeyPath) {
-  // Default: generate a host key if none provided
-  hostKeyPath = null;
+let hostKeys = undefined;
+if (process.env.ES_SSH_HOST_KEY) {
+  try {
+    const keyData = fs.readFileSync(process.env.ES_SSH_HOST_KEY);
+    hostKeys = { ed25519: keyData };
+  } catch (err) {
+    console.error("[exporter] Failed to load host key:", err.message);
+  }
 }
 
 const sshd = new Server({
-  hostKeys: hostKeyPath ? [hostKeyPath] : undefined,
+  hostKeys: hostKeys,
 }, (client) => {
   client.on("authentication", (ctx) => {
     if (ctx.method === "publickey") {
