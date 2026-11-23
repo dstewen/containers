@@ -28,7 +28,7 @@ RUN npm install --no-audit --no-fund \
 COPY server/ ./server/
 
 # ─── Stage 2: Extract nvidia-smi (amd64 only) ────────────
-FROM nvidia/cuda:12.8.1-runtime-ubuntu22.04 AS nvidia-smi-amd64
+FROM nvidia/cuda:13.5.0-runtime-ubuntu22.04 AS nvidia-smi-amd64
 
 # ─── Stage 3: Final image ────────────────────────────────
 FROM node:22-bookworm-slim
