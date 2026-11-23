@@ -5,10 +5,15 @@
 # Exposes:
 #   - SSH server (port 2222): allows sparkdash to run allowlisted metric commands
 #   - HTTP /metrics (port 9100): Prometheus text-format endpoint
+#
+# Multi-arch: linux/arm64 and linux/amd64
+# Uses nvidia/cuda:runtime base for nvidia-smi + driver libs.
+# ============================================================
 
 ARG VERSION=dev
 ARG REVISION=none
 
+# ─── Stage 1: Build Node.js app ──────────────────────────
 ARG NODE_IMAGE=node:22-bookworm-slim
 FROM ${NODE_IMAGE} AS builder
 
@@ -24,18 +29,17 @@ RUN npm install --no-audit --no-fund \
 
 COPY server/ ./server/
 
-# ============================================================
-# Production image — SSH + HTTP exporter, no GPU deps baked in
-# (GPU tools run natively on the host; the exporter calls them)
-# ============================================================
-FROM ${NODE_IMAGE}
+# ─── Stage 2: CUDA runtime base (includes nvidia-smi + driver libs)
+# Resolves to correct arch variant (arm64 or amd64) at build time.
+ARG CUDA_IMAGE=nvidia/cuda:12.8.1-runtime-ubuntu22.04
+FROM ${CUDA_IMAGE}
 
 ARG VERSION=dev
 ARG REVISION=none
 
-# SSH server, nvidia-smi path, and basic utilities
+# Install SSH server + sshpass + basic utilities (add to CUDA base)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    openssh-server sshpass procps \
+    openssh-server sshpass procps curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Generate a host key if none is provided at runtime
@@ -43,6 +47,7 @@ RUN ssh-keygen -A 2>/dev/null || true
 
 WORKDIR /app
 
+# Copy built Node.js app from builder stage
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/server ./server
