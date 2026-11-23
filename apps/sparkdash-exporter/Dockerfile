@@ -7,15 +7,13 @@
 #   - HTTP /metrics (port 9100): Prometheus text-format endpoint
 #
 # Multi-arch: linux/arm64 and linux/amd64
-# Uses nvidia/cuda:runtime base for nvidia-smi + driver libs.
 # ============================================================
 
 ARG VERSION=dev
 ARG REVISION=none
 
 # ─── Stage 1: Build Node.js app ──────────────────────────
-ARG NODE_IMAGE=node:22-bookworm-slim
-FROM ${NODE_IMAGE} AS builder
+FROM node:22-bookworm-slim AS builder
 
 WORKDIR /app
 
@@ -29,20 +27,21 @@ RUN npm install --no-audit --no-fund \
 
 COPY server/ ./server/
 
-# ─── Stage 2: CUDA runtime base (includes nvidia-smi + driver libs)
-# Resolves to correct arch variant (arm64 or amd64) at build time.
-ARG CUDA_IMAGE=nvidia/cuda:12.8.1-runtime-ubuntu22.04
-FROM ${CUDA_IMAGE}
+# ─── Stage 2: Extract nvidia-smi (amd64 only) ────────────
+FROM nvidia/cuda:12.8.1-runtime-ubuntu22.04 AS nvidia-smi-amd64
+
+# ─── Stage 3: Final image ────────────────────────────────
+FROM node:22-bookworm-slim
 
 ARG VERSION=dev
 ARG REVISION=none
 
-# Install SSH server + sshpass + basic utilities (add to CUDA base)
+# Install SSH server + sshpass + basic utilities
 RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-server sshpass procps curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Generate a host key if none is provided at runtime
+# Generate SSH host keys
 RUN ssh-keygen -A 2>/dev/null || true
 
 WORKDIR /app
@@ -51,6 +50,11 @@ WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/server ./server
+
+# Copy nvidia-smi from CUDA image (amd64 only — nvidia-smi binary is amd64)
+# nvidia-container-toolkit injects driver libs at runtime; the driver
+# package is installed via Talos nvidia-gpu extension on each node.
+COPY --from=nvidia-smi-amd64 /usr/bin/nvidia-smi /usr/bin/nvidia-smi
 
 # Create config volume for power meters
 VOLUME /app/config
