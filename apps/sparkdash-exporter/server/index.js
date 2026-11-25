@@ -63,9 +63,7 @@ const sshd = new Server({
 }, (client) => {
   client.on("authentication", (ctx) => {
     if (ctx.method === "publickey") {
-      if (ctx.key.algo === "ssh-ed25519" || ctx.key.algo === "rsa-sha2-256" || ctx.key.algo === "rsa-sha2-512") {
-        return ctx.accept();
-      }
+      return ctx.accept();
     }
     if (ctx.method === "password" && process.env.ES_ACCEPT_PASSWORD === "1") {
       return ctx.accept();
