@@ -117,14 +117,14 @@ const sshd = new Server({
           }
           accept({ exitStatus: 0 });
           setTimeout(() => {
-            session._chan.stdin?.write(result + "\n");
+            session._chan.write(result + "\n");
             session._chan.end();
           }, 0);
         } catch (err) {
           console.error(`[exporter] Command ${cmd} failed:`, err.message);
           accept({ exitStatus: 1 });
           setTimeout(() => {
-            session._chan.stdin?.write(JSON.stringify({ error: err.message }) + "\n");
+            session._chan.write(JSON.stringify({ error: err.message }) + "\n");
             session._chan.end();
           }, 0);
         }
