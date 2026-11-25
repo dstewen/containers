@@ -7,6 +7,8 @@
 #   - HTTP /metrics (port 9100): Prometheus text-format endpoint
 #
 # Multi-arch: linux/arm64 and linux/amd64
+# Uses NVIDIA device plugin to inject nvidia-smi at runtime
+# (runtimeClassName: nvidia, NVIDIA_DRIVER_CAPABILITIES: utility).
 # ============================================================
 
 ARG VERSION=dev
@@ -27,10 +29,7 @@ RUN npm install --no-audit --no-fund \
 
 COPY server/ ./server/
 
-# ─── Stage 2: Extract nvidia-smi (amd64 only) ────────────
-FROM nvidia/cuda:12.8.1-runtime-ubuntu22.04 AS nvidia-smi-amd64
-
-# ─── Stage 3: Final image ────────────────────────────────
+# ─── Final image ─────────────────────────────────────────
 FROM node:22-bookworm-slim
 
 ARG VERSION=dev
@@ -51,10 +50,8 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/server ./server
 
-# Copy nvidia-smi from CUDA image (amd64 only — nvidia-smi binary is amd64)
-# nvidia-container-toolkit injects driver libs at runtime; the driver
-# package is installed via Talos nvidia-gpu extension on each node.
-COPY --from=nvidia-smi-amd64 /usr/bin/nvidia-smi /usr/bin/nvidia-smi
+# nvidia-smi is injected at runtime by the NVIDIA device plugin
+# (runtimeClassName: nvidia, NVIDIA_DRIVER_CAPABILITIES: utility).
 
 # Create config volume for power meters
 VOLUME /app/config
