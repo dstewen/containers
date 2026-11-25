@@ -78,6 +78,62 @@ const sshd = new Server({
   client.on("session", (accept) => {
     const session = accept();
 
+    // Allow interactive shell requests (used by browser SSH clients)
+    session.on("shell", (accept) => {
+      const ch = accept();
+      ch.stderr.write("sparkDash exporter shell. Allowed commands: " + [...ALLOWED_COMMANDS].join(", ") + "\n");
+
+      ch.on("data", (data) => {
+        const cmd = data.toString().trim();
+        if (!cmd || cmd === "exit" || cmd === "quit") {
+          ch.end();
+          return;
+        }
+
+        if (!ALLOWED_COMMANDS.has(cmd)) {
+          ch.stderr.write("Unknown command: '" + cmd + "'. Allowed: " + [...ALLOWED_COMMANDS].join(", ") + "\n");
+          return;
+        }
+
+        (async () => {
+          try {
+            let result;
+            switch (cmd) {
+              case "probe":
+                result = JSON.stringify({ status: "ok", uptime: process.uptime() });
+                break;
+              case "gpu-metrics":
+                result = JSON.stringify(await collectGpu());
+                break;
+              case "cpu-metrics":
+                result = JSON.stringify(await collectCpu());
+                break;
+              case "memory-metrics":
+                result = JSON.stringify(await collectMemory());
+                break;
+              case "network-metrics":
+                result = JSON.stringify(await collectNetwork());
+                break;
+              case "storage-metrics":
+                result = JSON.stringify(await collectStorage());
+                break;
+              case "llm-metrics":
+                result = JSON.stringify(await collectLlm());
+                break;
+              case "system-info":
+                result = JSON.stringify(await collectSystemInfo());
+                break;
+            }
+            ch.write(result + "\n");
+          } catch (err) {
+            ch.stderr.write("Error: " + err.message + "\n");
+          }
+        })();
+      });
+
+      ch.on("close", () => {});
+    });
+
     session.on("exec", (accept, reject, payload) => {
       const cmd = payload.data;
       if (!ALLOWED_COMMANDS.has(cmd)) {
